@@ -6,9 +6,12 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import team.dovecotmc.metropolis.abstractinterface.util.MALocalizationUtil;
 
 import java.util.List;
 
@@ -20,7 +23,7 @@ import java.util.List;
 public class ItemBlockWithTooltips extends BlockItem {
     public final Style style;
     public ItemBlockWithTooltips(Block block, Settings settings) {
-        this(block, settings, Style.EMPTY);
+        this(block, settings, Style.EMPTY.withColor(TextColor.fromRgb(DyeColor.GRAY.getSignColor())));
     }
 
     public ItemBlockWithTooltips(Block block, Settings settings, Style style) {
@@ -31,6 +34,6 @@ public class ItemBlockWithTooltips extends BlockItem {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
-        tooltip.add(Text.translatable("tooltip." + Registry.ITEM.getId(this).toTranslationKey()).setStyle(this.style));
+        tooltip.add(MALocalizationUtil.translatableText("tooltip." + Registry.ITEM.getId(this).toTranslationKey()).setStyle(this.style));
     }
 }

@@ -1,5 +1,7 @@
 package team.dovecotmc.metropolis.block;
 
+import mtr.block.BlockTicketBarrier;
+import mtr.data.RailwayData;
 import mtr.data.Station;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -28,7 +30,9 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
+import team.dovecotmc.metropolis.abstractinterface.util.MALocalizationUtil;
 import team.dovecotmc.metropolis.block.entity.BlockEntityTurnstile;
+import team.dovecotmc.metropolis.item.IItemOpenGate;
 import team.dovecotmc.metropolis.item.ItemCard;
 import team.dovecotmc.metropolis.item.ItemTicket;
 import team.dovecotmc.metropolis.item.MetroItems;
@@ -45,13 +49,14 @@ import team.dovecotmc.metropolis.util.MtrStationUtil;
  */
 @SuppressWarnings("deprecation")
 public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntityProvider, IBlockStationOverlayShouldRender {
+    public static final int CLOSE_DELAY = 80;
     public static final BooleanProperty OPEN = BooleanProperty.of("open");
     public static final IntProperty TYPE = IntProperty.of("type", 0, 2);
     public static final BooleanProperty CONNECTED = BooleanProperty.of("connected");
     public final boolean icOnly;
 
     public BlockTurnstile(boolean icOnly) {
-        super(Settings.of(Material.METAL).nonOpaque());
+        super(Settings.of(Material.METAL).strength(4.0f).nonOpaque());
         this.icOnly = icOnly;
     }
 
@@ -64,7 +69,7 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
         if (world.getBlockEntity(pos) instanceof BlockEntityTurnstile blockEntity && !state.get(OPEN)) {
             Station station = MtrStationUtil.getStationByPos(pos, world);
             if (station == null) {
-                player.sendMessage(Text.translatable("info.metropolis.turnstile_error"), true);
+                player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.turnstile_error"), true);
                 return ActionResult.SUCCESS;
             }
 
@@ -74,14 +79,15 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
             BlockEntityTurnstile.EnumTurnstileType type = BlockEntityTurnstile.EnumTurnstileType.get(state.get(TYPE));
             if (stack.getItem() == MtrCommonUtil.getBrushItem()) {
                 if (type != BlockEntityTurnstile.EnumTurnstileType.ENTER && blockEntity.getItems().isEmpty()) {
-                    player.sendMessage(Text.translatable("info.metropolis.unable_switch_turnstile_type"), true);
+                    player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.unable_switch_turnstile_type"), true);
                     return ActionResult.SUCCESS;
                 }
+
                 world.playSound(null, pos, SoundEvents.BLOCK_COPPER_BREAK, SoundCategory.BLOCKS, 1f, 1f);
                 int nextTypeIndex = (type.index + 1) % 2;
                 world.setBlockState(pos, state.with(TYPE, nextTypeIndex));
-                Text typeName = Text.translatable("misc.metropolis.turnstile_mode." + BlockEntityTurnstile.EnumTurnstileType.get(nextTypeIndex).name().toLowerCase());
-                player.sendMessage(Text.translatable("info.metropolis.turnstile_type", typeName), true);
+                Text typeName = MALocalizationUtil.translatableText("misc.metropolis.turnstile_mode." + BlockEntityTurnstile.EnumTurnstileType.get(nextTypeIndex).name().toLowerCase());
+                player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.turnstile_type", typeName), true);
                 blockEntity.readNbt(nbt);
                 blockEntity.clear();
                 ((ServerPlayerEntity) player).networkHandler.sendPacket(blockEntity.toUpdatePacket());
@@ -90,6 +96,24 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
                 }
 
                 return ActionResult.SUCCESS;
+            }
+
+            // Open Gate
+            if ((stack.getItem() instanceof ItemCard && ((ItemCard) stack.getItem()).infiniteBalance)) {
+                if (player.isCreative() && world.getTime() - nbt.getLong(BlockEntityTurnstile.TICKET_ANIMATION_START) >= 7) {
+                    world.playSound(null, pos, MtrSoundUtil.TICKET_BARRIER_CONCESSIONARY, SoundCategory.BLOCKS, 1f, 1f);
+                    world.playSound(null, pos, SoundEvents.BLOCK_WOOL_BREAK, SoundCategory.BLOCKS, 1f, 1f);
+                    player.giveItemStack(blockEntity.getStack(0));
+                    blockEntity.removeStack(0);
+
+                    ((ServerPlayerEntity) player).networkHandler.sendPacket(blockEntity.toUpdatePacket());
+                    MetroServerNetwork.removeInventoryItem(0, pos, (ServerPlayerEntity) player);
+
+                    // Open
+                    world.setBlockState(pos, state.with(OPEN, true));
+                    world.createAndScheduleBlockTick(pos, this, CLOSE_DELAY);
+                    return ActionResult.SUCCESS;
+                }
             }
 
             if (type == BlockEntityTurnstile.EnumTurnstileType.ENTER) {
@@ -103,8 +127,9 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
                         ((ServerPlayerEntity) player).networkHandler.sendPacket(blockEntity.toUpdatePacket());
                         MetroServerNetwork.removeInventoryItem(0, pos, (ServerPlayerEntity) player);
 
+                        // Open
                         world.setBlockState(pos, state.with(OPEN, true));
-                        world.createAndScheduleBlockTick(pos, this, 40);
+                        world.createAndScheduleBlockTick(pos, this, CLOSE_DELAY);
                         return ActionResult.SUCCESS;
                     }
                 }
@@ -113,13 +138,13 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
                 if (stack.getItem() instanceof ItemTicket) {
                     if (icOnly) {
                         world.playSound(null, pos, MtrSoundUtil.TICKET_BARRIER, SoundCategory.BLOCKS, 1f, 1f);
-                        player.sendMessage(Text.translatable("info.metropolis.use_other_turnstile"), true);
+                        player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.use_other_turnstile"), true);
                         return ActionResult.SUCCESS;
                     }
 
                     if (stack.getOrCreateNbt().contains(ItemTicket.ENTERED_STATION) || stack.getOrCreateNbt().contains(ItemTicket.ENTERED_ZONE)) {
                         world.playSound(null, pos, MtrSoundUtil.TICKET_BARRIER, SoundCategory.BLOCKS, 1f, 1f);
-                        player.sendMessage(Text.translatable("info.metropolis.to_service_center"), true);
+                        player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.to_service_center"), true);
                         return ActionResult.SUCCESS;
                     }
 
@@ -140,7 +165,7 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
                 } else if (stack.getItem() instanceof ItemCard) {
                     if (stack.getOrCreateNbt().contains(ItemCard.ENTERED_STATION) || stack.getOrCreateNbt().contains(ItemCard.ENTERED_ZONE)) {
                         world.playSound(null, pos, MtrSoundUtil.TICKET_BARRIER, SoundCategory.BLOCKS, 1f, 1f);
-                        player.sendMessage(Text.translatable("info.metropolis.to_service_center"), true);
+                        player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.to_service_center"), true);
                         return ActionResult.SUCCESS;
                     }
 
@@ -151,28 +176,28 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
                     world.playSound(null, pos, MtrSoundUtil.TICKET_BARRIER_CONCESSIONARY, SoundCategory.BLOCKS, 1f, 1f);
 
                     world.setBlockState(pos, state.with(OPEN, true));
-                    world.createAndScheduleBlockTick(pos, this, 40);
+                    world.createAndScheduleBlockTick(pos, this, CLOSE_DELAY);
                 }
             } else if (type == BlockEntityTurnstile.EnumTurnstileType.EXIT) {
                 NbtCompound stackNbt = stack.getOrCreateNbt();
-                if (!stackNbt.contains(ItemTicket.ENTERED_STATION) && !stackNbt.contains(ItemTicket.ENTERED_ZONE)) {
+                if (!(stack.getItem() instanceof IItemOpenGate) && !stackNbt.contains(ItemTicket.ENTERED_STATION) && !stackNbt.contains(ItemTicket.ENTERED_ZONE)) {
                     world.playSound(null, pos, MtrSoundUtil.TICKET_BARRIER, SoundCategory.BLOCKS, 1f, 1f);
-                    player.sendMessage(Text.translatable("info.metropolis.to_service_center"), true);
+                    player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.to_service_center"), true);
                     return ActionResult.SUCCESS;
                 }
 
-                if (stack.getItem() instanceof ItemTicket) {
+                if (stack.getItem() instanceof ItemTicket || stack.getItem() instanceof IItemOpenGate) {
                     if (icOnly) {
                         world.playSound(null, pos, MtrSoundUtil.TICKET_BARRIER, SoundCategory.BLOCKS, 1f, 1f);
-                        player.sendMessage(Text.translatable("info.metropolis.use_other_turnstile"), true);
+                        player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.use_other_turnstile"), true);
                         return ActionResult.SUCCESS;
                     }
 
                     int cost = Math.abs(station.zone - stackNbt.getInt(ItemTicket.ENTERED_ZONE)) + 1;
                     int balance = stackNbt.getInt(ItemTicket.BALANCE);
 
-                    if (balance < cost) {
-                        player.sendMessage(Text.translatable("info.metropolis.no_enough_balance"), true);
+                    if (balance < cost && !(stack.getItem() instanceof IItemOpenGate)) {
+                        player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.no_enough_balance"), true);
                         return ActionResult.SUCCESS;
                     }
 
@@ -187,13 +212,13 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
                     blockEntity.readNbt(nbt);
 
                     world.setBlockState(pos, state.with(OPEN, true));
-                    world.createAndScheduleBlockTick(pos, this, 40);
+                    world.createAndScheduleBlockTick(pos, this, CLOSE_DELAY);
                 } else if (stack.getItem() instanceof ItemCard) {
                     int cost = Math.abs(station.zone - stackNbt.getInt(ItemCard.ENTERED_ZONE)) + 1;
                     int balance = stackNbt.getInt(ItemCard.BALANCE);
 
                     if (balance < cost) {
-                        player.sendMessage(Text.translatable("info.metropolis.no_enough_balance"), true);
+                        player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.no_enough_balance"), true);
                         return ActionResult.SUCCESS;
                     }
 
@@ -204,7 +229,7 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
                     world.playSound(null, pos, MtrSoundUtil.TICKET_BARRIER_CONCESSIONARY, SoundCategory.BLOCKS, 1f, 1f);
 
                     world.setBlockState(pos, state.with(OPEN, true));
-                    world.createAndScheduleBlockTick(pos, this, 40);
+                    world.createAndScheduleBlockTick(pos, this, CLOSE_DELAY);
                 }
             }
             // TODO: Direct debit
@@ -215,7 +240,7 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
                 int balance = stackNbt.getInt(ItemTicket.BALANCE);
 
                 if (balance < cost) {
-                    player.sendMessage(Text.translatable("info.metropolis.no_enough_balance"), true);
+                    player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.no_enough_balance"), true);
                     return ActionResult.SUCCESS;
                 }
 
@@ -229,7 +254,7 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
                     blockEntity.readNbt(nbt);
 
                     world.setBlockState(pos, state.with(OPEN, true));
-                    world.createAndScheduleBlockTick(pos, this, 40);
+                    world.createAndScheduleBlockTick(pos, this, CLOSE_DELAY);
                 } else if (stack.getItem() instanceof ItemCard) {
                     // TODO: Cards
                 }
@@ -264,6 +289,15 @@ public class BlockTurnstile extends HorizontalFacingBlock implements BlockEntity
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         world.setBlockState(pos, state.with(OPEN, false));
+    }
+
+    @Override
+    public VoxelShape getSidesShape(BlockState state, BlockView world, BlockPos pos) {
+        Direction facing = state.get(FACING);
+        return VoxelShapes.union(
+                MetroBlockUtil.getVoxelShapeByDirection(0, 0, 0, 3, 16, 16, facing),
+                MetroBlockUtil.getVoxelShapeByDirection(15, 0, 0, 16, 16, 16, facing)
+        );
     }
 
     @Override

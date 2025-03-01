@@ -17,6 +17,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import team.dovecotmc.metropolis.Metropolis;
+import team.dovecotmc.metropolis.abstractinterface.util.MALocalizationUtil;
 import team.dovecotmc.metropolis.item.ItemTicket;
 import team.dovecotmc.metropolis.item.MetroItems;
 import team.dovecotmc.metropolis.util.MtrStationUtil;
@@ -66,7 +67,7 @@ public class TicketVendorScreen2 extends Screen {
     protected int tipId = 0;
 
     public TicketVendorScreen2(BlockPos pos, Screen parentScreen, TicketVendorData data) {
-        super(Text.translatable("gui.metropolis.ticket_vendor_2.title"));
+        super(MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_2.title"));
         this.pos = pos;
         this.parentScreen = parentScreen;
         this.data = data;
@@ -108,7 +109,7 @@ public class TicketVendorScreen2 extends Screen {
         // Title
         VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
         this.textRenderer.drawWithOutline(
-                Text.translatable("gui.metropolis.ticket_vendor_2.title").asOrderedText(),
+                MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_2.title").asOrderedText(),
                 intoTexturePosX(36),
                 intoTexturePosY(12),
                 0xFFFFFF,
@@ -122,7 +123,7 @@ public class TicketVendorScreen2 extends Screen {
         // Subtitle
         this.textRenderer.draw(
                 matrices,
-                Text.translatable("gui.metropolis.ticket_vendor_2.subtitle"),
+                MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_2.subtitle"),
                 intoTexturePosX(20),
                 intoTexturePosY(35),
                 0x3F3F3F
@@ -142,169 +143,167 @@ public class TicketVendorScreen2 extends Screen {
 
             List<Station> sortedStations = stations.stream().sorted(Comparator.comparingInt(o -> (Math.abs(o.zone - locatedStation.zone)))).toList();
 
-            if (locatedStation != null) {
-                final int maxStrWidth = 96;
+            final int maxStrWidth = 96;
 //                int h0 = 128;
-                int x0 = 20;
-                int y0 = 51;
-                int i0 = -sliderPos;
+            int x0 = 20;
+            int y0 = 51;
+            int i0 = -sliderPos;
 
-                // Slider1
-                int h1 = 119;
-                int x1 = 174;
-                int y1 = (int) (51 + (float) sliderPos / (float) (stationsSize - MAX_VISIBLE) * h1);
+            // Slider1
+            int h1 = 119;
+            int x1 = 174;
+            int y1 = (int) (51 + (float) sliderPos / (float) (stationsSize - MAX_VISIBLE) * h1);
 
-                RenderSystem.setShaderTexture(0, SLIDER_ID);
+            RenderSystem.setShaderTexture(0, SLIDER_ID);
+            drawTexture(
+                    matrices,
+                    intoTexturePosX(x1),
+                    intoTexturePosY(y1),
+                    0,
+                    0,
+                    SLIDER_WIDTH, SLIDER_HEIGHT,
+                    SLIDER_WIDTH, SLIDER_HEIGHT
+            );
+
+            for (Station station : sortedStations) {
+                // Station base
+                if (i0 < 0) {
+                    i0++;
+                    continue;
+                }
+
+                if (i0 >= MAX_VISIBLE) {
+                    break;
+                }
+
+                boolean thisTabHovering = this.mouseX >= intoTexturePosX(x0) && this.mouseY >= intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0) && this.mouseX <= intoTexturePosX(x0 + STATION_TAB_BASE_WIDTH) && this.mouseY <= intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + STATION_TAB_BASE_HEIGHT);
+                if (thisTabHovering) {
+                    RenderSystem.setShaderTexture(0, STATION_TAB_BASE_HOVER_ID);
+                } else {
+                    RenderSystem.setShaderTexture(0, STATION_TAB_BASE_ID);
+                }
                 drawTexture(
                         matrices,
-                        intoTexturePosX(x1),
-                        intoTexturePosY(y1),
+                        intoTexturePosX(x0),
+                        intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0),
                         0,
                         0,
-                        SLIDER_WIDTH, SLIDER_HEIGHT,
-                        SLIDER_WIDTH, SLIDER_HEIGHT
+                        STATION_TAB_BASE_WIDTH, STATION_TAB_BASE_HEIGHT,
+                        STATION_TAB_BASE_WIDTH, STATION_TAB_BASE_HEIGHT
                 );
 
-                for (Station station : sortedStations) {
-                    // Station base
-                    if (i0 < 0) {
-                        i0++;
-                        continue;
-                    }
+                // Station color
+                float r = ColorHelper.Argb.getRed(station.color);
+                float g = ColorHelper.Argb.getGreen(station.color);
+                float b = ColorHelper.Argb.getBlue(station.color);
+                RenderSystem.setShaderColor(r / 256f, g / 256f, b / 255f, 1f);
+                RenderSystem.setShaderTexture(0, new Identifier(Metropolis.MOD_ID, "textures/blanco.png"));
+                drawTexture(
+                        matrices,
+                        intoTexturePosX(x0 + 4),
+                        intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + 4),
+                        0,
+                        0,
+                        8, 8,
+                        8, 8
+                );
+                RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
-                    if (i0 >= MAX_VISIBLE) {
-                        break;
-                    }
-
-                    boolean thisTabHovering = this.mouseX >= intoTexturePosX(x0) && this.mouseY >= intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0) && this.mouseX <= intoTexturePosX(x0 + STATION_TAB_BASE_WIDTH) && this.mouseY <= intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + STATION_TAB_BASE_HEIGHT);
-                    if (thisTabHovering) {
-                        RenderSystem.setShaderTexture(0, STATION_TAB_BASE_HOVER_ID);
-                    } else {
-                        RenderSystem.setShaderTexture(0, STATION_TAB_BASE_ID);
-                    }
-                    drawTexture(
-                            matrices,
-                            intoTexturePosX(x0),
-                            intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0),
-                            0,
-                            0,
-                            STATION_TAB_BASE_WIDTH, STATION_TAB_BASE_HEIGHT,
-                            STATION_TAB_BASE_WIDTH, STATION_TAB_BASE_HEIGHT
-                    );
-
-                    // Station color
-                    float r = ColorHelper.Argb.getRed(station.color);
-                    float g = ColorHelper.Argb.getGreen(station.color);
-                    float b = ColorHelper.Argb.getBlue(station.color);
-                    RenderSystem.setShaderColor(r / 256f, g / 256f, b / 255f, 1f);
-                    RenderSystem.setShaderTexture(0, new Identifier(Metropolis.MOD_ID, "textures/blanco.png"));
-                    drawTexture(
-                            matrices,
-                            intoTexturePosX(x0 + 4),
-                            intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + 4),
-                            0,
-                            0,
-                            8, 8,
-                            8, 8
-                    );
-                    RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-
-                    // Station name
-                    matrices.push();
-                    matrices.scale(scaleFactor, scaleFactor, scaleFactor);
-                    String stationName = station.name;
-                    String[] arr0 = station.name.split("\\|");
-                    if (arr0.length > 1) {
-                        stationName = arr0[0] + " " + arr0[1];
-                    }
-                    int offset = (int) (this.client.world.getTime() / 5) % (stationName.length() + 1);
-                    if (textRenderer.getWidth(stationName) * scaleFactor > maxStrWidth) {
-                        String str0 = stationName.substring(offset) + " " + stationName;
-                        int var0 = str0.length();
-                        while (textRenderer.getWidth(str0) * scaleFactor > maxStrWidth) {
-                            str0 = str0.substring(0, var0);
-                            var0 -= 1;
-                        }
-                        textRenderer.draw(
-                                matrices,
-                                str0,
-                                intoTexturePosX(x0 + 16) / scaleFactor,
-                                intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + 5) / scaleFactor,
-                                0x3F3F3F
-                        );
-                    } else {
-                        textRenderer.draw(
-                                matrices,
-                                stationName,
-                                intoTexturePosX(x0 + 16) / scaleFactor,
-                                intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + 5) / scaleFactor,
-                                0x3F3F3F
-                        );
-                    }
-
-                    // Station cost
-                    int cost = Math.abs(station.zone - locatedStation.zone) + 1;
-                    Text costText = Text.translatable("misc.metropolis.cost", cost);
-                    textRenderer.draw(
-                            matrices,
-                            costText,
-                            intoTexturePosX(x0 + STATION_TAB_BASE_WIDTH - 20 - textRenderer.getWidth(costText) / 2f) / scaleFactor,
-                            intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + 5) / scaleFactor,
-                            0x3F3F3F
-                    );
-
-                    // Station right arrow
-                    textRenderer.draw(
-                            matrices,
-                            Text.literal(">"),
-                            intoTexturePosX(x0 + STATION_TAB_BASE_WIDTH - 8) / scaleFactor,
-                            intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + 5) / scaleFactor,
-                            0x3F3F3F
-                    );
-
-                    matrices.pop();
-
-                    // Go to payment
-                    if (thisTabHovering && pressed) {
-                        if (this.client.world != null) {
-                            playDownSound(MinecraftClient.getInstance().getSoundManager());
-                        }
-                        String locatedStationFirstName = station.name;
-                        String[] arr1 = locatedStation.name.split("\\|");
-                        if (arr1.length > 1) {
-                            locatedStationFirstName = arr1[0];
-                        }
-                        String stationFirstName = station.name;
-                        String[] arr2 = station.name.split("\\|");
-                        if (arr2.length > 1) {
-                            stationFirstName = arr2[0];
-                        }
-
-                        ItemStack ticketStack = new ItemStack(MetroItems.ITEM_SINGLE_TRIP_TICKET);
-                        NbtCompound nbt = ticketStack.getOrCreateNbt();
-                        nbt.putInt(ItemTicket.BALANCE, cost);
-                        nbt.putString(ItemTicket.START_STATION, locatedStationFirstName);
-                        nbt.putString(ItemTicket.END_STATION, stationFirstName);
-
-                        this.client.setScreen(new TicketVendorPaymentScreen(
-                                pos,
-                                new TicketVendorPaymentData(
-                                        TicketVendorPaymentData.EnumTicketVendorPaymentType.SINGLE_TRIP,
-                                         cost,
-                                        new Text[] {
-                                                Text.translatable("gui.metropolis.ticket_vendor_payment.single_trip.title"),
-                                                Text.translatable("gui.metropolis.ticket_vendor_payment.single_trip.from_and_to", locatedStationFirstName, stationFirstName),
-                                                Text.translatable("gui.metropolis.ticket_vendor_payment.single_trip.ticket_value", cost),
-                                                Text.translatable("gui.metropolis.ticket_vendor_payment.single_trip.amount", 1),
-                                        },
-                                        ticketStack
-                                ),
-                                this
-                        ));
-                    }
-
-                    i0++;
+                // Station name
+                matrices.push();
+                matrices.scale(scaleFactor, scaleFactor, scaleFactor);
+                String stationName = station.name;
+                String[] arr0 = station.name.split("\\|");
+                if (arr0.length > 1) {
+                    stationName = arr0[0] + " " + arr0[1];
                 }
+                int offset = (int) (this.client.world.getTime() / 5) % (stationName.length() + 1);
+                if (textRenderer.getWidth(stationName) * scaleFactor > maxStrWidth) {
+                    String str0 = stationName.substring(offset) + " " + stationName;
+                    int var0 = str0.length();
+                    while (textRenderer.getWidth(str0) * scaleFactor > maxStrWidth) {
+                        str0 = str0.substring(0, var0);
+                        var0 -= 1;
+                    }
+                    textRenderer.draw(
+                            matrices,
+                            str0,
+                            intoTexturePosX(x0 + 16) / scaleFactor,
+                            intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + 5) / scaleFactor,
+                            0x3F3F3F
+                    );
+                } else {
+                    textRenderer.draw(
+                            matrices,
+                            stationName,
+                            intoTexturePosX(x0 + 16) / scaleFactor,
+                            intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + 5) / scaleFactor,
+                            0x3F3F3F
+                    );
+                }
+
+                // Station cost
+                int cost = Math.abs(station.zone - locatedStation.zone) + 1;
+                Text costText = MALocalizationUtil.translatableText("misc.metropolis.cost", cost);
+                textRenderer.draw(
+                        matrices,
+                        costText,
+                        intoTexturePosX(x0 + STATION_TAB_BASE_WIDTH - 20 - textRenderer.getWidth(costText) / 2f) / scaleFactor,
+                        intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + 5) / scaleFactor,
+                        0x3F3F3F
+                );
+
+                // Station right arrow
+                textRenderer.draw(
+                        matrices,
+                        Text.literal(">"),
+                        intoTexturePosX(x0 + STATION_TAB_BASE_WIDTH - 8) / scaleFactor,
+                        intoTexturePosY(y0 + STATION_TAB_BASE_HEIGHT * i0 + 5) / scaleFactor,
+                        0x3F3F3F
+                );
+
+                matrices.pop();
+
+                // Go to payment
+                if (thisTabHovering && pressed) {
+                    if (this.client.world != null) {
+                        playDownSound(MinecraftClient.getInstance().getSoundManager());
+                    }
+                    String locatedStationFirstName = station.name;
+                    String[] arr1 = locatedStation.name.split("\\|");
+                    if (arr1.length > 1) {
+                        locatedStationFirstName = arr1[0];
+                    }
+                    String stationFirstName = station.name;
+                    String[] arr2 = station.name.split("\\|");
+                    if (arr2.length > 1) {
+                        stationFirstName = arr2[0];
+                    }
+
+                    ItemStack ticketStack = new ItemStack(MetroItems.ITEM_SINGLE_TRIP_TICKET);
+                    NbtCompound nbt = ticketStack.getOrCreateNbt();
+                    nbt.putInt(ItemTicket.BALANCE, cost);
+                    nbt.putString(ItemTicket.START_STATION, locatedStationFirstName);
+                    nbt.putString(ItemTicket.END_STATION, stationFirstName);
+
+                    this.client.setScreen(new TicketVendorPaymentScreen(
+                            pos,
+                            new TicketVendorPaymentData(
+                                    TicketVendorPaymentData.EnumTicketVendorPaymentType.SINGLE_TRIP,
+                                     cost,
+                                    new Text[] {
+                                            MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_payment.single_trip.title"),
+                                            MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_payment.single_trip.from_and_to", locatedStationFirstName, stationFirstName),
+                                            MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_payment.single_trip.ticket_value", cost),
+                                            MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_payment.single_trip.amount", 1),
+                                    },
+                                    ticketStack
+                            ),
+                            this
+                    ));
+                }
+
+                i0++;
             }
         }
 
@@ -313,7 +312,7 @@ public class TicketVendorScreen2 extends Screen {
         // Subtitle 2
         this.textRenderer.draw(
                 matrices,
-                Text.translatable("gui.metropolis.ticket_vendor_2.subtitle_2"),
+                MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_2.subtitle_2"),
                 intoTexturePosX(184),
                 intoTexturePosY(35),
                 0x3F3F3F
@@ -347,7 +346,7 @@ public class TicketVendorScreen2 extends Screen {
 
             matrices.push();
             matrices.scale(scaleFactor, scaleFactor, scaleFactor);
-            Text cost = Text.literal(Text.translatable("misc.metropolis.cost", valuesToSelect[i]).getString());
+            Text cost = Text.literal(MALocalizationUtil.translatableText("misc.metropolis.cost", valuesToSelect[i]).getString());
             textRenderer.draw(
                     matrices,
                     cost,
@@ -373,9 +372,9 @@ public class TicketVendorScreen2 extends Screen {
                                 TicketVendorPaymentData.EnumTicketVendorPaymentType.SINGLE_TRIP,
                                 i + 1,
                                 new Text[] {
-                                        Text.translatable("gui.metropolis.ticket_vendor_payment.single_trip.title"),
-                                        Text.translatable("gui.metropolis.ticket_vendor_payment.single_trip.ticket_value", Text.translatable("misc.metropolis.cost", i + 1).getString()),
-                                        Text.translatable("gui.metropolis.ticket_vendor_payment.single_trip.amount", 1),
+                                        MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_payment.single_trip.title"),
+                                        MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_payment.single_trip.ticket_value", MALocalizationUtil.translatableText("misc.metropolis.cost", i + 1).getString()),
+                                        MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_payment.single_trip.amount", 1),
                                 },
                                 ticketStack
                         ),
@@ -405,7 +404,7 @@ public class TicketVendorScreen2 extends Screen {
 
         matrices.push();
         matrices.scale(scaleFactor, scaleFactor, scaleFactor);
-        Text moreCostOptions = Text.translatable("gui.metropolis.ticket_vendor_2.custom_value_option");
+        Text moreCostOptions = MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_2.custom_value_option");
         textRenderer.draw(
                 matrices,
                 moreCostOptions,

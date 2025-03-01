@@ -11,7 +11,7 @@
     "contact": {
         "repo": "https://github.com/DoveCotMC/Metropolis"
     },
-    "license": "All-Rights-Reserved",
+    "license": "MIT License",
     "icon": "assets/metropolis/metropolis.png",
     "environment": "*",
     "mixins": [
@@ -26,6 +26,9 @@
         ],
         "modmenu": [
             "team.dovecotmc.metropolis.client.modmenu.MetroModMenu"
+        ],
+        "fabric-datagen": [
+            "team.dovecotmc.metropolis.datagen.MetropolisDataGenerator"
         ]
     },
     "depends": {

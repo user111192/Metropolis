@@ -16,6 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import team.dovecotmc.metropolis.Metropolis;
+import team.dovecotmc.metropolis.abstractinterface.util.MALocalizationUtil;
 import team.dovecotmc.metropolis.client.network.MetroClientNetwork;
 import team.dovecotmc.metropolis.item.ItemCard;
 
@@ -49,7 +50,7 @@ public class TicketVendorScreen4 extends Screen {
     protected static final int BUTTON_NUMBER_TEXTURE_WIDTH = 18;
     protected static final int BUTTON_NUMBER_TEXTURE_HEIGHT = 14;
 
-    public final List<Screen> screens;
+    public final Screen screen;
     protected final BlockPos pos;
     protected final TicketVendorData data;
     public final List<Integer> inputToHandle;
@@ -62,11 +63,11 @@ public class TicketVendorScreen4 extends Screen {
     protected boolean pressed = false;
     protected String value = "0";
 
-    public TicketVendorScreen4(BlockPos pos, List<Screen> screens, TicketVendorData data) {
-        super(Text.translatable("gui.metropolis.ticket_vendor_4.title"));
+    public TicketVendorScreen4(BlockPos pos, Screen screen, TicketVendorData data) {
+        super(MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_4.title"));
         this.pos = pos;
         this.data = data;
-        this.screens = screens;
+        this.screen = screen;
         this.inputToHandle = new ArrayList<>();
         this.inputToHandle2 = new ArrayList<>();
     }
@@ -129,7 +130,7 @@ public class TicketVendorScreen4 extends Screen {
 
                 matrices.push();
                 matrices.scale(scaleFactor, scaleFactor, scaleFactor);
-                Text price = Text.translatable("misc.metropolis.cost", String.valueOf(givenPrices[i0]));
+                Text price = MALocalizationUtil.translatableText("misc.metropolis.cost", String.valueOf(givenPrices[i0]));
                 textRenderer.draw(
                         matrices,
                         price,
@@ -171,7 +172,7 @@ public class TicketVendorScreen4 extends Screen {
 
         matrices.push();
         matrices.scale(scaleFactor, scaleFactor, scaleFactor);
-        Text continueText = Text.translatable("gui.metropolis.ticket_vendor_4.continue");
+        Text continueText = MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_4.continue");
         textRenderer.draw(
                 matrices,
                 continueText,
@@ -204,8 +205,8 @@ public class TicketVendorScreen4 extends Screen {
                             TicketVendorPaymentData.EnumTicketVendorPaymentType.IC_CARD_CHARGE,
                             Integer.parseInt(value),
                             new Text[] {
-                                    Text.translatable("gui.metropolis.ticket_vendor_payment.ic_charge.title"),
-                                    Text.translatable("gui.metropolis.ticket_vendor_payment.ic_charge.ticket_value", this.value),
+                                    MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_payment.ic_charge.title"),
+                                    MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_payment.ic_charge.ticket_value", this.value),
                             },
                             ticketStack
                     ),
@@ -329,7 +330,7 @@ public class TicketVendorScreen4 extends Screen {
         // Title
         VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
         this.textRenderer.drawWithOutline(
-                Text.translatable("gui.metropolis.ticket_vendor_4.title").asOrderedText(),
+                MALocalizationUtil.translatableText("gui.metropolis.ticket_vendor_4.title").asOrderedText(),
                 intoTexturePosX(36),
                 intoTexturePosY(12),
                 0xFFFFFF,
@@ -345,7 +346,7 @@ public class TicketVendorScreen4 extends Screen {
         matrices.scale(scaleFactor, scaleFactor, scaleFactor);
         this.textRenderer.drawWithShadow(
                 matrices,
-                Text.translatable("misc.metropolis.cost", this.value),
+                MALocalizationUtil.translatableText("misc.metropolis.cost", this.value),
                 intoTexturePosX(38) / scaleFactor,
                 intoTexturePosY(90) / scaleFactor,
                 0xFFFFFF
@@ -427,11 +428,7 @@ public class TicketVendorScreen4 extends Screen {
     @Override
     public void close() {
         if (this.client != null) {
-            if (this.screens != null) {
-                this.client.setScreen(screens.get(this.screens.size() - 1));
-            } else {
-                this.client.setScreen(null);
-            }
+            this.client.setScreen(screen);
         }
     }
 

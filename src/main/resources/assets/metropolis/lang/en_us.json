@@ -15,9 +15,12 @@
     "gui.metropolis.ticket_vendor_1.button.buy_commuter": "Buy commuter",
     "gui.metropolis.ticket_vendor_1.button.buy_ic_card": "Buy an IC card",
 
+    "gui.metropolis.ticket_vendor_1.tips": "᛫ Use [Refund] button to return wrong tickets.\n᛫ Dovecot is a Dovecot?\n᛫ This GUI is based on the JR East EV23 TVM.\n᛫ You pull out the ticket, then walk thru. Actually it's not.\n᛫ There was a discussion about changing the Cordon Block to the Condor Block.",
     "gui.metropolis.ticket_vendor_1.tips_0": "᛫ Use [Refund] button to return wrong tickets.",
     "gui.metropolis.ticket_vendor_1.tips_1": "᛫ Dovecot is a Dovecot?",
-    "gui.metropolis.ticket_vendor_1.tips_2": "᛫ This GUI is made by Arrokoth233 and Radekemia.",
+    "gui.metropolis.ticket_vendor_1.tips_2": "᛫ This GUI is based on the JR East EV23 TVM.",
+    "gui.metropolis.ticket_vendor_1.tips_3": "᛫ You pull out the ticket, then walk thru. Actually it's not.",
+    "gui.metropolis.ticket_vendor_1.tips_4": "᛫ There was a discussion about changing the Cordon Block to the Condor Block.",
 
     "gui.metropolis.ticket_vendor_2.title": "Tickets",
     "gui.metropolis.ticket_vendor_2.subtitle": "Single trip tickets",
@@ -30,6 +33,9 @@
     "gui.metropolis.ticket_vendor_4.title": "Charge",
     "gui.metropolis.ticket_vendor_4.continue": "Continue",
 
+    "gui.metropolis.ticket_vendor_buy_ic.title": "Buy IC Card",
+    "gui.metropolis.ticket_vendor_buy_ic.continue": "Continue",
+
     "gui.metropolis.ticket_vendor_warning.title": "Warning",
     "gui.metropolis.ticket_vendor_warning.title_warning": "Warning",
     "gui.metropolis.ticket_vendor_warning.warning_no_card": "Please insert your IC Card.",
@@ -40,6 +46,10 @@
     "gui.metropolis.ticket_vendor_payment.price": "Price: %s",
     "gui.metropolis.ticket_vendor_payment.balance": "Balance: %s",
 
+    "gui.metropolis.ticket_vendor_payment.from_and_to": "  %s ⥋ %s",
+    "gui.metropolis.ticket_vendor_payment.ticket_value": "  Value: %s",
+    "gui.metropolis.ticket_vendor_payment.amount": "  Amount: %s",
+
     "gui.metropolis.ticket_vendor_payment.single_trip.title": "Single trip",
     "gui.metropolis.ticket_vendor_payment.single_trip.from_and_to": "  %s ⥋ %s",
     "gui.metropolis.ticket_vendor_payment.single_trip.ticket_value": "  Value: %s",
@@ -47,6 +57,9 @@
 
     "gui.metropolis.ticket_vendor_payment.ic_charge.title": "IC Card charge",
     "gui.metropolis.ticket_vendor_payment.ic_charge.ticket_value": "  Value: %s",
+
+    "gui.metropolis.ticket_vendor_payment.buy_ic.title": "Buy IC Card",
+    "gui.metropolis.ticket_vendor_payment.buy_ic.ticket_value": "  Initial value: %s",
 
     "gui.metropolis.fare_adj_main.title": "Fare adjustment",
     "gui.metropolis.fare_adj_main.subtitle": "Insert ticket/IC Card to enable all functions",
@@ -56,15 +69,27 @@
 
     "gui.metropolis.fare_adj_no_ticket.title": "Fare adjustment",
     "gui.metropolis.fare_adj_no_ticket.subtitle": "No tickets",
-    "gui.metropolis.fare_adj_no_ticket.if_you_have_receipt": "If you have a\nticket receipt:",
-    "gui.metropolis.fare_adj_no_ticket.insert_receipt": "Insert receipt to make fare adjustment",
-    "gui.metropolis.fare_adj_no_ticket.if_you_dont_have_receipt": "If you don't have a\nticket receipt:",
+    "gui.metropolis.fare_adj_no_ticket.if_you_have_receipt": "If you have a\nboarding ticket:",
+    "gui.metropolis.fare_adj_no_ticket.insert_receipt": "Insert ticket to make fare adjustment",
+    "gui.metropolis.fare_adj_no_ticket.if_you_dont_have_receipt": "If you don't have a\nboarding ticket:",
     "gui.metropolis.fare_adj_no_ticket.pay_fare": "You have to pay the maximum fare.",
+    "gui.metropolis.fare_adj_no_ticket.pay_button": "Pay fare",
+
+    "gui.metropolis.fare_adj_payment.title": "Fare adjustment",
+    "gui.metropolis.fare_adj_payment.subtitle": "Review Payment",
+    "gui.metropolis.fare_adj_payment.price": "Price: %s",
+    "gui.metropolis.fare_adj_payment.balance": "Balance: %s",
+    "gui.metropolis.fare_adj_payment.continue_button": "Continue",
+
+    "gui.metropolis.fare_adj_payment.single_trip.title": "Exit Ticket",
+    "gui.metropolis.fare_adj_payment.single_trip.ticket_value": "  Value: %s",
+    "gui.metropolis.fare_adj_payment.single_trip.amount": "  Amount: %s",
 
     "tooltip.metropolis.ticket.from_and_to": "%s ⥋ %s",
     "tooltip.metropolis.ticket.balance": "Balance: %s",
     "tooltip.metropolis.ticket.entered_station": "Entered station: %s",
     "tooltip.metropolis.card.balance": "Balance: %s/%s",
+    "tooltip.metropolis.infinity_balance": "Infinity Balance",
 
     "info.metropolis.turnstile_type": "Turnstile type: %s",
     "info.metropolis.unable_switch_turnstile_type": "Unable to switch turnstile type",
@@ -84,6 +109,8 @@
     "item.metropolis.single_trip_ticket_used": "Single trip ticket",
     "tooltip.metropolis.single_trip_ticket_expired": "Expired",
     "item.metropolis.card": "IC Card",
+    "item.metropolis.creative_card": "IC Card",
+    "item.metropolis.exit_ticket": "Exit Ticket",
 
     "block.metropolis.cable": "Cable",
 
@@ -92,11 +119,11 @@
     "block.metropolis.ticket_vendor_panel": "Ticket vendor decoration",
     "tooltip.metropolis.ticket_vendor_panel": "§7Decoration Panel",
     "block.metropolis.ticket_vendor_em10": "Ticket vendor machine",
-    "tooltip.metropolis.ticket_vendor_em10": "§7EM10",
+    "tooltip.metropolis.ticket_vendor_em10": "§7JR East EM10",
     "block.metropolis.ticket_vendor_ev23": "Ticket vendor machine",
-    "tooltip.metropolis.ticket_vendor_ev23": "§7EV23",
+    "tooltip.metropolis.ticket_vendor_ev23": "§7JR East EV23",
     "block.metropolis.fare_adj_ev23": "Fare adjustment machine",
-    "tooltip.metropolis.fare_adj_ev23": "§7EV23",
+    "tooltip.metropolis.fare_adj_ev23": "§7JR East EV23",
 
     "block.metropolis.ceiling_a": "Ceiling",
     "block.metropolis.fluorescent_lamp": "Fluorescent lamp",
@@ -107,7 +134,20 @@
     "block.metropolis.turnstile_ic_only.enter": "Turnstile (IC only, Enter)",
     "block.metropolis.turnstile_ic_only.exit": "Turnstile (IC only, Exit)",
 
-    "block.metropolis.itv_monitor": "ITV Monitor",
+    "block.metropolis.camera_ceiling": "Security Camera",
+
+    "block.metropolis.sign_no_photo": "Sign (No photos)",
+
+    "block.metropolis.psd_jr_door_1": "Platform Fence Door",
+    "tooltip.metropolis.psd_jr_door_1": "Half Height",
+    "block.metropolis.psd_jr_door_2": "Platform Fence Door",
+    "tooltip.metropolis.psd_jr_door_2": "Half Height Windowed",
+    "block.metropolis.psd_jr_fence_1": "Platform Fence",
+    "tooltip.metropolis.psd_jr_fence_1": "Half Height",
+    "block.metropolis.psd_jr_fence_2": "Platform Fence Controller",
+    "tooltip.metropolis.psd_jr_fence_2": "[WIP] Half Height",
+
+    "block.metropolis.itv_monitor": "Platform ITV Monitor",
 
     "block.metropolis.security_door": "Security door",
     "block.metropolis.security_inspection_machine": "Security inspection machine",
@@ -133,5 +173,7 @@
     "block.metropolis.cordon_red_black": "Cordon block",
     "tooltip.metropolis.cordon_red_black": "§7Red-black",
     "block.metropolis.cordon_red_white": "Cordon block",
-    "tooltip.metropolis.cordon_red_white": "§7Red-white"
+    "tooltip.metropolis.cordon_red_white": "§7Red-white",
+
+    "block.metropolis.bench": "Bench"
 }

@@ -29,6 +29,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 import team.dovecotmc.metropolis.Metropolis;
+import team.dovecotmc.metropolis.abstractinterface.util.MALocalizationUtil;
 import team.dovecotmc.metropolis.util.MetroBlockUtil;
 import team.dovecotmc.metropolis.util.MtrSoundUtil;
 
@@ -44,7 +45,7 @@ public class BlockSecurityDoor extends HorizontalFacingBlock {
 //    public static final EnumProperty<Direction.Axis> AXIS;
 
     public BlockSecurityDoor() {
-        super(Settings.of(Material.METAL, DyeColor.LIGHT_GRAY).nonOpaque());
+        super(Settings.of(Material.METAL, DyeColor.LIGHT_GRAY).strength(6.0f).nonOpaque());
     }
 
     @Override
@@ -94,7 +95,7 @@ public class BlockSecurityDoor extends HorizontalFacingBlock {
                     if (open) {
                         world.playSound(null, pos, MtrSoundUtil.TICKET_BARRIER_CONCESSIONARY, SoundCategory.BLOCKS, 1f, 1f);
                     } else {
-                        player.sendMessage(Text.translatable("info.metropolis.has_danger_item"), true);
+                        player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.has_danger_item"), true);
                     }
                     world.setBlockState(pos, state.with(OPEN, open));
                     world.createAndScheduleBlockTick(pos, state.getBlock(), 20);
@@ -115,6 +116,19 @@ public class BlockSecurityDoor extends HorizontalFacingBlock {
                 world.breakBlock(pos.up(), false);
             }
         }
+    }
+
+    @Override
+    public VoxelShape getSidesShape(BlockState state, BlockView world, BlockPos pos) {
+        return VoxelShapes.union(MetroBlockUtil.getVoxelShapeByDirection(
+                0, 0, 0,
+                1, 16, 16,
+                state.get(FACING)
+        ), MetroBlockUtil.getVoxelShapeByDirection(
+                15, 0, 0,
+                16, 16, 16,
+                state.get(FACING)
+        ));
     }
 
     @Override

@@ -16,10 +16,12 @@ import team.dovecotmc.metropolis.client.block.entity.*;
 import team.dovecotmc.metropolis.Metropolis;
 import team.dovecotmc.metropolis.block.MetroBlocks;
 import team.dovecotmc.metropolis.client.block.model.provider.MetroModelProvicer;
+import team.dovecotmc.metropolis.client.entity.EntitySittableRenderer;
 import team.dovecotmc.metropolis.client.gui.AlphaWarningHud;
 import team.dovecotmc.metropolis.client.gui.MetroBlockPlaceHud;
 import team.dovecotmc.metropolis.client.network.MetroClientNetwork;
 import team.dovecotmc.metropolis.client.config.MetroClientConfig;
+import team.dovecotmc.metropolis.entity.MetroEntities;
 
 /**
  * @author Arrokoth
@@ -56,18 +58,22 @@ public class MetropolisClient implements ClientModInitializer {
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new MetroModelProvicer());
 
         BlockEntityRendererRegistry.register(MetroBlockEntities.BUMPER_BLOCK_ENTITY, ctx -> new BumperBlockEntityRenderer());
+        BlockEntityRendererRegistry.register(MetroBlockEntities.CAMERA_BLOCK_ENTITY, ctx -> new CameraBlockEntityRenderer());
         BlockEntityRendererRegistry.register(MetroBlockEntities.TURNSTILE_BLOCK_ENTITY, ctx -> new TurnstileBlockEntityRenderer());
         BlockEntityRendererRegistry.register(MetroBlockEntities.FARE_ADJ_BLOCK_ENTITY, ctx -> new FareAdjBlockEntityRenderer());
         BlockEntityRendererRegistry.register(MetroBlockEntities.TICKET_VENDOR_BLOCK_ENTITY, ctx -> new TicketVendorBlockEntityRenderer());
         BlockEntityRendererRegistry.register(MetroBlockEntities.ITV_MONITOR_BLOCK_ENTITY, ctx -> new ITVMonitorBlockEntityRenderer());
         BlockEntityRendererRegistry.register(MetroBlockEntities.SECURITY_INSPECTION_MACHINE_BLOCK_ENTITY, ctx -> new SecurityInspectionMachineBlockEntityRenderer());
+        BlockEntityRendererRegistry.register(MetroBlockEntities.PSD_SMALL_DOOR, ctx -> new BlockEntityRendererPSDSmallDoorSemiAuto());
+
+        EntityRendererRegistry.register(MetroEntities.SITTABLE, EntitySittableRenderer::new);
 
         HudRenderCallback.EVENT.register(BLOCK_PLACE_HUD::render);
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ResourceReloadListener());
 
-        if (IS_ALPHA && !FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            HudRenderCallback.EVENT.register(ALPHA_WARNING_HUD::render);
-        }
+//        if (IS_ALPHA && !FabricLoader.getInstance().isDevelopmentEnvironment()) {
+//            HudRenderCallback.EVENT.register(ALPHA_WARNING_HUD::render);
+//        }
     }
 
     private static class ResourceReloadListener implements SimpleSynchronousResourceReloadListener {
@@ -78,7 +84,7 @@ public class MetropolisClient implements ClientModInitializer {
 
         @Override
         public void reload(ResourceManager manager) {
-            System.out.println("reloading!!!!");
+            Metropolis.LOGGER.info("Reloading!");
             MetropolisClient.config = MetroClientConfig.load();
         }
     }

@@ -10,6 +10,7 @@ import net.minecraft.util.registry.Registry;
 import team.dovecotmc.metropolis.Metropolis;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,11 +41,13 @@ public class MetroConfig {
     );
     public List<String> dangerItems;
     public Item currencyItem;
+    public int maxFare;
 
     public MetroConfig() {
         this.json = new JsonObject();
         this.dangerItems = DEFAULT_DANGER_ITEMS;
         this.currencyItem = Items.EMERALD;
+        this.maxFare = 128;
     }
 
     public void refresh() {
@@ -66,6 +69,11 @@ public class MetroConfig {
         }
         Item currency = Registry.ITEM.get(new Identifier(json.get("currency_item").getAsString()));
         this.currencyItem = new ItemStack(currency).isEmpty() ? Items.EMERALD : currency;
+
+        if (!json.has("max_fare")) {
+            json.addProperty("max_fare", 128);
+        }
+        this.maxFare = 128;
     }
 
     public static MetroConfig load() {

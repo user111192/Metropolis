@@ -14,6 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.dovecotmc.metropolis.Metropolis;
+import team.dovecotmc.metropolis.block.entity.BlockEntityFareAdj;
 import team.dovecotmc.metropolis.block.entity.BlockEntityTicketVendor;
 import team.dovecotmc.metropolis.item.ItemCard;
 import team.dovecotmc.metropolis.item.ItemTicket;
@@ -53,9 +54,11 @@ public class MetroServerNetwork {
         PacketByteBuf packet = PacketByteBufs.create();
         packet.writeBlockPos(pos);
         ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
-        if (!(stack.getItem() instanceof ItemTicket || stack.getItem() instanceof ItemCard)) {
-            stack = ItemStack.EMPTY;
-        }
+        // TODO: Card charger
+        stack = ItemStack.EMPTY;
+//        if (!(stack.getItem() instanceof ItemTicket || stack.getItem() instanceof ItemCard)) {
+//            stack = ItemStack.EMPTY;
+//        }
         packet.writeItemStack(stack);
         ServerPlayNetworking.send(player, FARE_ADJ_GUI, packet);
     }
@@ -128,6 +131,42 @@ public class MetroServerNetwork {
         });
     }
 
+    public static final Identifier FARE_ADJ_CLOSE = new Identifier(Metropolis.MOD_ID, "fare_adj_close");
+    private static void registerFareAdjCloseReceiver() {
+        ServerPlayNetworking.registerGlobalReceiver(FARE_ADJ_CLOSE, (server, player, handler, buf, responseSender) -> {
+            BlockPos pos = buf.readBlockPos();
+            ItemStack stack = buf.readItemStack();
+            int balance = buf.readInt();
+            Item item = Metropolis.config.currencyItem;
+            server.execute(() -> {
+                System.out.println(pos);
+                System.out.println(stack);
+                System.out.println(balance);
+                System.out.println(item);
+                if (balance > 0) {
+                    for (int i = 0; i < balance / item.getMaxCount(); i++) {
+                        player.getInventory().setStack(player.getInventory().getSlotWithStack(new ItemStack(item)), ItemStack.EMPTY);
+                    }
+                    if (balance % item.getMaxCount() > 0) {
+                        player.getInventory().removeStack(player.getInventory().getSlotWithStack(new ItemStack(item)), balance % item.getMaxCount());
+                    }
+                }
+                
+                World world = player.getWorld();
+                if (world != null) {
+                    world.playSound(null, pos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS, 1f, 1f);
+                    if (world.getBlockEntity(pos) instanceof BlockEntityFareAdj blockEntity) {
+                        blockEntity.setStack(0, stack);
+                        NbtCompound nbt = blockEntity.createNbt();
+                        nbt.putLong(BlockEntityTicketVendor.TICKET_ANIMATION_BEGIN_TIME, world.getTime());
+                        blockEntity.readNbt(nbt);
+                        player.networkHandler.sendPacket(blockEntity.toUpdatePacket());
+                    }
+                }
+            });
+        });
+    }
+
     public static final Identifier GET_CURRENCY_ITEM = new Identifier(Metropolis.MOD_ID, "get_currency_item");
     public static final Identifier GET_CURRENCY_ITEM_RECEIVER = new Identifier(Metropolis.MOD_ID, "get_currency_item_receiver");
     public static void registerCurrencyItemReceiver() {
@@ -136,9 +175,18 @@ public class MetroServerNetwork {
         });
     }
 
+    public static final Identifier GET_MAX_FARE = new Identifier(Metropolis.MOD_ID, "get_max_fare");
+    public static final Identifier GET_MAX_FARE_RECEIVER = new Identifier(Metropolis.MOD_ID, "get_max_fare_receiver");
+    public static void registerMaxFareReceiver() {
+        ServerPlayNetworking.registerGlobalReceiver(GET_MAX_FARE, (server, player, handler, buf, responseSender) -> {
+            ServerPlayNetworking.send(player, GET_MAX_FARE_RECEIVER, PacketByteBufs.copy(PacketByteBufs.create().writeInt(Metropolis.config.maxFare)));
+        });
+    }
+
     public static void registerAll() {
         registerTicketVendorResultReceiver();
         registerTicketVendorCloseReceiver();
         registerCurrencyItemReceiver();
+        registerFareAdjCloseReceiver();
     }
 }

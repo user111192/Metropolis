@@ -33,6 +33,7 @@ public class MetroItems {
     public static final Item ITEM_FLUORESCENT_LAMP = register("fluorescent_lamp", new BlockItem(MetroBlocks.BLOCK_FLUORESCENT_LAMP, new Item.Settings().group(Metropolis.ITEM_GROUP)));
 
     public static final Item ITEM_BUMPER = register("bumper", new BlockItem(MetroBlocks.BLOCK_BUMPER, new Item.Settings().group(Metropolis.ITEM_GROUP)));
+    public static final Item ITEM_CAMERA = register("camera", new BlockItem(MetroBlocks.BLOCK_CAMERA_CEILING, new Item.Settings().group(Metropolis.ITEM_GROUP)));
 
     // Turnstile
     public static final Item ITEM_TURNSTILE_ENTER = register("turnstile_enter", new ItemTurnstile(MetroBlocks.BLOCK_TURNSTILE, new Item.Settings().group(Metropolis.ITEM_GROUP), BlockEntityTurnstile.EnumTurnstileType.ENTER));
@@ -40,16 +41,27 @@ public class MetroItems {
     public static final Item ITEM_TURNSTILE_IC_ONLY_ENTER = register("turnstile_ic_only_enter", new ItemTurnstile(MetroBlocks.BLOCK_TURNSTILE_IC_ONLY, new Item.Settings().group(Metropolis.ITEM_GROUP), BlockEntityTurnstile.EnumTurnstileType.ENTER));
     public static final Item ITEM_TURNSTILE_IC_ONLY_EXIT = register("turnstile_ic_only_exit", new ItemTurnstile(MetroBlocks.BLOCK_TURNSTILE_IC_ONLY, new Item.Settings().group(Metropolis.ITEM_GROUP), BlockEntityTurnstile.EnumTurnstileType.EXIT));
 
+    // Sign
+    public static final Item ITEM_SIGN_NO_PHOTO = register("sign_no_photo", new BlockItem(MetroBlocks.BLOCK_SIGN_NO_PHOTO, new Item.Settings().group(Metropolis.ITEM_GROUP)));
+
     // Ticket Machine
 //    public static final Item ITEM_TICKET_MACHINE = register("ticket_machine", new BlockItem(MetroBlocks.BLOCK_TICKET_MACHINE, new Item.Settings().group(Metropolis.ITEM_GROUP)));
 
     // PIDS
 //    public static final Item ITEM_PIDS_1 = register("pids_1", new ItemBlockShowStationHUD(MetroBlocks.BLOCK_PIDS_1, new Item.Settings().group(Metropolis.ITEM_GROUP)));
 
+    // PSD
+    public static final Item ITEM_PSD_JR_DOOR_1 = register("psd_jr_door_1", new ItemBlockWithTooltips(MetroBlocks.BLOCK_PSD_JR_DOOR_1, new Item.Settings().group(Metropolis.ITEM_GROUP)));
+    public static final Item ITEM_PSD_JR_DOOR_2 = register("psd_jr_door_2", new ItemBlockWithTooltips(MetroBlocks.BLOCK_PSD_JR_DOOR_2, new Item.Settings().group(Metropolis.ITEM_GROUP)));
+    public static final Item ITEM_PSD_JR_FENCE_1 = register("psd_jr_fence_1", new ItemBlockWithTooltips(MetroBlocks.BLOCK_PSD_JR_FENCE_1, new Item.Settings().group(Metropolis.ITEM_GROUP)));
+    public static final Item ITEM_PSD_JR_FENCE_2 = register("psd_jr_fence_2", new ItemBlockWithTooltips(MetroBlocks.BLOCK_PSD_JR_FENCE_2, new Item.Settings().group(Metropolis.ITEM_GROUP)));
+
     // Ticket
     public static final Item ITEM_SINGLE_TRIP_TICKET = register("single_trip_ticket", new ItemTicket(new Item.Settings(), true));
     public static final Item ITEM_SINGLE_TRIP_TICKET_USED = register("single_trip_ticket_used", new ItemTicket(new Item.Settings(), true));
-    public static final Item ITEM_CARD = register("card", new ItemCard(new Item.Settings().group(Metropolis.ITEM_GROUP)));
+    public static final Item ITEM_CARD = register("card", new ItemCard(new Item.Settings().group(Metropolis.ITEM_GROUP), false));
+    public static final Item ITEM_CREATIVE_CARD = register("creative_card", new ItemCard(new Item.Settings().group(Metropolis.ITEM_GROUP), true));
+    public static final Item ITEM_EXIT_TICKET = register("exit_ticket", new ItemExitTicket(new Item.Settings().group(Metropolis.ITEM_GROUP)));
     // Monitor
     public static final Item ITEM_ITV_MONITOR = register("itv_monitor", new BlockItem(MetroBlocks.BLOCK_ITV_MONITOR, new Item.Settings().group(Metropolis.ITEM_GROUP)));
     // Security instruments
@@ -80,6 +92,8 @@ public class MetroItems {
     public static final Item ITEM_CORDON_YELLOW_WHITE = register("cordon_yellow_white", new ItemBlockWithTooltips(MetroBlocks.BLOCK_CORDON_YELLOW_WHITE, new Item.Settings().group(Metropolis.ITEM_GROUP)));
     public static final Item ITEM_CORDON_RED_BLACK = register("cordon_red_black", new ItemBlockWithTooltips(MetroBlocks.BLOCK_CORDON_RED_BLACK, new Item.Settings().group(Metropolis.ITEM_GROUP)));
     public static final Item ITEM_CORDON_RED_WHITE = register("cordon_red_white", new ItemBlockWithTooltips(MetroBlocks.BLOCK_CORDON_RED_WHITE, new Item.Settings().group(Metropolis.ITEM_GROUP)));
+    // Bench
+    public static final Item ITEM_BENCH = register("bench", new BlockItem(MetroBlocks.BLOCK_BENCH, new Item.Settings().group(Metropolis.ITEM_GROUP)));
 
     // TODO: Blind path
 //    public static final Item ITEM_BLIND_PATH_STRIP = register("blind_path_strip", new BlockItem(MetroBlocks.BLOCK_BLIND_PATH_STRIP, new Item.Settings().group(Metropolis.ITEM_GROUP)));

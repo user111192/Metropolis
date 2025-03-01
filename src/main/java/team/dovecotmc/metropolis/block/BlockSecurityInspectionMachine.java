@@ -5,7 +5,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -49,7 +48,7 @@ public class BlockSecurityInspectionMachine extends HorizontalFacingBlock implem
     public static final EnumProperty<EnumBlockSecurityInspectionMachinePart> PART = EnumProperty.of("part", EnumBlockSecurityInspectionMachinePart.class);
 
     public BlockSecurityInspectionMachine() {
-        super(Settings.of(Material.METAL, DyeColor.LIGHT_GRAY));
+        super(Settings.of(Material.METAL, DyeColor.LIGHT_GRAY).strength(6.0f));
     }
 
     @Override
@@ -178,6 +177,12 @@ public class BlockSecurityInspectionMachine extends HorizontalFacingBlock implem
                 world.breakBlock(pos.offset(state.get(FACING)).offset(state.get(FACING)), true);
             }
         }
+    }
+
+    @Override
+    public VoxelShape getSidesShape(BlockState state, BlockView world, BlockPos pos) {
+        return state.get(PART).equals(EnumBlockSecurityInspectionMachinePart.CENTER) ?
+                VoxelShapes.fullCube() : VoxelShapes.empty();
     }
 
     @Override

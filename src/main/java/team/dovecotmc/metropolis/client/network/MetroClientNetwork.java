@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
+import team.dovecotmc.metropolis.Metropolis;
 import team.dovecotmc.metropolis.client.gui.fare_adj.FareAdjData;
 import team.dovecotmc.metropolis.client.gui.fare_adj.FareAdjScreenMain;
 import team.dovecotmc.metropolis.client.gui.ticket_vendor.TicketVendorData;
@@ -35,6 +36,14 @@ public class MetroClientNetwork {
         buf.writeItemStack(stack);
         buf.writeInt(balance);
         ClientPlayNetworking.send(MetroServerNetwork.TICKET_VENDOR_RESULT, buf);
+    }
+
+    public static void fareAdjClose(BlockPos pos, ItemStack stack, int balance) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeBlockPos(pos);
+        buf.writeItemStack(stack);
+        buf.writeInt(balance);
+        ClientPlayNetworking.send(MetroServerNetwork.FARE_ADJ_CLOSE, buf);
     }
 
     private static void registerTicketVendorGuiReceiver() {
@@ -87,11 +96,25 @@ public class MetroClientNetwork {
         });
     }
 
+
+    public static int maxFare = Metropolis.config.maxFare;
+
+    public static void updateMaxFare() {
+        ClientPlayNetworking.send(MetroServerNetwork.GET_MAX_FARE, PacketByteBufs.create());
+    }
+
+    public static void registerGetMaxFareReceiver() {
+        ClientPlayNetworking.registerGlobalReceiver(MetroServerNetwork.GET_MAX_FARE_RECEIVER, (client, handler, buf, responseSender) -> {
+            maxFare = buf.readInt();
+        });
+    }
+
     public static void registerAll() {
         registerTicketVendorGuiReceiver();
         registerTicketVendorChargeGuiReceiver();
         registerRemoveInventoryItem();
         registerGetCurrencyItemReceiver();
         registerFareAdjGuiReceiver();
+        registerGetMaxFareReceiver();
     }
 }
