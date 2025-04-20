@@ -3,8 +3,6 @@ plugins {
     id 'maven-publish'
 }
 
-boolean mtr4 = false
-
 version = project.mod_version
 group = project.maven_group
 
@@ -29,17 +27,14 @@ fabricApi {
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Minecraft Transit Railway
-    if (mtr4)
-        modImplementation "maven.modrinth:minecraft-transit-railway:FABRIC-4.0.0-beta-8+1.19.2"
-    else
-        modImplementation "maven.modrinth:minecraft-transit-railway:FABRIC-1.19.2-3.2.2-hotfix-1"
+    modImplementation "maven.modrinth:minecraft-transit-railway:FABRIC-1.19.2-3.2.2-hotfix-1"
 
     // NTE
     modImplementation "maven.modrinth:mtr-nte:0.5.1+1.19.2"
