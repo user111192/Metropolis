@@ -57,7 +57,7 @@ jobs:
     - name: Delete temp files
       run: exit 0
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v4
       with:
         # Artifact name
         name: Mod File
@@ -66,7 +66,7 @@ jobs:
         # The desired behavior if no files are found using the provided path.
         if-no-files-found: error
     - name: Upload a Build Artifact (Resources)
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v4
       with:
         # Artifact name
         name: Resource File
