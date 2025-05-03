@@ -249,6 +249,11 @@ public class BlockTurnstile extends HorizontalDirectionalBlock implements Entity
                 }
 
                 if (stack.getItem() instanceof ItemTicket) {
+                    if (icOnly) {
+                        world.playSound(null, pos, MtrSoundUtil.TICKET_BARRIER, SoundSource.BLOCKS, 1f, 1f);
+                        player.displayClientMessage(MALocalizationUtil.translatableText("info.metropolis.use_other_turnstile"), true);
+                        return InteractionResult.SUCCESS;
+                    }
                     world.playSound(null, pos, SoundEvents.WOOL_BREAK, SoundSource.BLOCKS, 1f, 1f);
                     blockEntity.setItem(0, stack);
                     player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
