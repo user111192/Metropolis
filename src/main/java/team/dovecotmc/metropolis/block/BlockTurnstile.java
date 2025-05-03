@@ -236,34 +236,35 @@ public class BlockTurnstile extends HorizontalDirectionalBlock implements Entity
                     world.setBlockAndUpdate(pos, state.setValue(OPEN, true));
                     world.scheduleTick(pos, this, CLOSE_DELAY);
                 }
-            }
-            // TODO: Direct debit
-            /* else if (type == BlockEntityTurnstile.EnumTurnstileType.DIRECT_DEBIT) {
-                NbtCompound stackNbt = stack.getOrCreateNbt();
+            } else if (type == BlockEntityTurnstile.EnumTurnstileType.DIRECT_DEBIT) {
+                // direct debit
+                CompoundTag stackNbt = stack.getOrCreateTag();
 
                 int cost = Math.abs(station.zone - stackNbt.getInt(ItemTicket.ENTERED_ZONE)) + 1;
                 int balance = stackNbt.getInt(ItemTicket.BALANCE);
 
                 if (balance < cost) {
-                    player.sendMessage(MALocalizationUtil.translatableText("info.metropolis.no_enough_balance"), true);
-                    return ActionResult.SUCCESS;
+                    player.displayClientMessage(MALocalizationUtil.translatableText("info.metropolis.no_enough_balance"), true);
+                    return InteractionResult.SUCCESS;
                 }
 
                 if (stack.getItem() instanceof ItemTicket) {
-                    world.playSound(null, pos, SoundEvents.BLOCK_WOOL_BREAK, SoundCategory.BLOCKS, 1f, 1f);
-                    blockEntity.setStack(0, stack);
-                    player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+                    world.playSound(null, pos, SoundEvents.WOOL_BREAK, SoundSource.BLOCKS, 1f, 1f);
+                    blockEntity.setItem(0, stack);
+                    player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
 
-                    nbt = blockEntity.createNbt();
-                    nbt.putLong(BlockEntityTurnstile.TICKET_ANIMATION_START, world.getTime());
-                    blockEntity.readNbt(nbt);
+                    nbt = blockEntity.saveWithoutMetadata();
+                    nbt.putLong(BlockEntityTurnstile.TICKET_ANIMATION_START, world.getGameTime());
+                    blockEntity.load(nbt);
 
-                    world.setBlockState(pos, state.with(OPEN, true));
-                    world.createAndScheduleBlockTick(pos, this, CLOSE_DELAY);
+                    world.setBlockAndUpdate(pos, state.setValue(OPEN, true));
+                    world.scheduleTick(pos, this, CLOSE_DELAY);
                 } else if (stack.getItem() instanceof ItemCard) {
-                    // TODO: Cards
+                    // TODO: Implement card handling for direct debit
+                    player.displayClientMessage(MALocalizationUtil.translatableText("info.metropolis.card_not_supported"), true);
+                    return InteractionResult.SUCCESS;
                 }
-            }*/
+            }
 
             ((ServerPlayer) player).connection.send(blockEntity.getUpdatePacket());
         }

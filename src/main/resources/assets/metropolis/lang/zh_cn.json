@@ -99,6 +99,7 @@
     "info.metropolis.to_service_center": "请去客服中心",
     "info.metropolis.use_other_turnstile": "请使用其它闸机",
     "info.metropolis.no_enough_balance": "余额不足",
+    "info.metropolis.card_not_supported": "不支持此IC卡",
     "info.metropolis.has_danger_item": "物品栏内检测到危险物品",
 
     "hud.title.pointed_station": "此处的车站",
