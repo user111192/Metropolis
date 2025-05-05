@@ -1,5 +1,9 @@
 package team.dovecotmc.metropolis.command;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import net.minecraft.commands.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import team.dovecotmc.metropolis.Metropolis;
 
 // getString(ctx, "string")
@@ -15,8 +19,9 @@ import team.dovecotmc.metropolis.Metropolis;
 @SuppressWarnings("unused")
 public class MetroCommands {
 
-    public static void initialize() {
+    public static void initialize(CommandDispatcher<CommandSourceStack> dispatcher) {
         Metropolis.LOGGER.info("Initializing Commands");
-        MTRTicketSystemCommands.register(Metropolis.commandDispatcher);
+        /*final LiteralCommandNode<CommandSourceStack> MTRTICKET = */
+        MTRTicketSystemCommands.register(dispatcher);
     }
 }

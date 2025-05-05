@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.*;
@@ -15,8 +16,8 @@ import team.dovecotmc.metropolis.abstractinterface.util.MALocalizationUtil;
 public class MTRTicketSystemCommands {
 
     private static final SimpleCommandExceptionType ERROR_NO_PLAYER = new SimpleCommandExceptionType(MALocalizationUtil.translatableText("message.metropolis.ticket.no_player"));
-    public static void register (CommandDispatcher<CommandSourceStack> commandDispatcher) {
-        commandDispatcher.register(
+    public static LiteralCommandNode<CommandSourceStack> register (CommandDispatcher<CommandSourceStack> dispatcher) {
+        return dispatcher.register(
                 Commands.literal("ticket")
                         // .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("get")

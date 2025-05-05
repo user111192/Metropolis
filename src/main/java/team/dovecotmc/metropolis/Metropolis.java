@@ -3,6 +3,7 @@ package team.dovecotmc.metropolis;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import team.dovecotmc.metropolis.block.MetroBlocks;
 import team.dovecotmc.metropolis.block.entity.MetroBlockEntities;
+import team.dovecotmc.metropolis.command.MetroCommands;
 import team.dovecotmc.metropolis.config.MetroConfig;
 import team.dovecotmc.metropolis.entity.EntitySittable;
 import team.dovecotmc.metropolis.entity.MetroEntities;
@@ -36,7 +38,7 @@ public class Metropolis implements ModInitializer {
             .icon(() -> new ItemStack(MetroItems.ITEM_ITV_MONITOR))
             .build();
     public static final MetroConfig config = MetroConfig.load();
-    public static final CommandDispatcher<CommandSourceStack> commandDispatcher = new CommandDispatcher<>();
+    // public static final CommandDispatcher<CommandSourceStack> commandDispatcher = new CommandDispatcher<>();
 
     @Override
     public void onInitialize() {
@@ -52,6 +54,12 @@ public class Metropolis implements ModInitializer {
                 (player, world, hand, hitResult) -> !player.isShiftKeyDown() && EntitySittable.trySit(world, hitResult.getBlockPos(), world.getBlockState(hitResult.getBlockPos()), hitResult, player) ?
                         InteractionResult.SUCCESS :
                         InteractionResult.PASS
+        );
+
+        CommandRegistrationCallback.EVENT.register(
+                (dispatcher, registryAccess, environment) -> {
+                    MetroCommands.initialize(dispatcher);
+                }
         );
     }
 }
