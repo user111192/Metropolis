@@ -75,8 +75,8 @@ public class MTRTicketSystemCommands {
     }
 
     private static int getSelfTicketInfo(CommandSourceStack source) throws CommandSyntaxException {
-        if (source.getPlayer() == null) throw ERROR_NO_PLAYER.create();
-        return getTicketInfo(source, source.getPlayer());
+        
+        return getTicketInfo(source, source.getPlayerOrException());
     }
 
     enum FareEvasionHandling {
@@ -120,13 +120,13 @@ public class MTRTicketSystemCommands {
     }
 
     private static int enterStation(CommandSourceStack source, int zone) throws CommandSyntaxException {
-        if (source.getPlayer() == null) throw ERROR_NO_PLAYER.create();
-        return enterStation(source, zone, source.getPlayer());
+        
+        return enterStation(source, zone, source.getPlayerOrException());
     }
 
     private static int enterStation(CommandSourceStack source, int zone, FareEvasionHandling fare_evasion_handling) throws CommandSyntaxException {
-        if (source.getPlayer() == null) throw ERROR_NO_PLAYER.create();
-        return enterStation(source, zone, source.getPlayer(), fare_evasion_handling);
+        
+        return enterStation(source, zone, source.getPlayerOrException(), fare_evasion_handling);
     }
 
     private static int exitStation(CommandSourceStack source, int zone, ServerPlayer serverplayer, FareEvasionHandling fare_evasion_handling) {
@@ -140,12 +140,12 @@ public class MTRTicketSystemCommands {
     }
 
     private static int exitStation(CommandSourceStack source, int zone) throws CommandSyntaxException {
-        if (source.getPlayer() == null) throw ERROR_NO_PLAYER.create();
-        return exitStation(source, zone, source.getPlayer(), DEFAULT_FARE_EVASION_HANDLING);
+        
+        return exitStation(source, zone, source.getPlayerOrException(), DEFAULT_FARE_EVASION_HANDLING);
     }
 
     private static int exitStation(CommandSourceStack source, int zone, FareEvasionHandling fare_evasion_handling) throws CommandSyntaxException {
-        if (source.getPlayer() == null) throw ERROR_NO_PLAYER.create();
-        return exitStation(source, zone, source.getPlayer(), fare_evasion_handling);
+        
+        return exitStation(source, zone, source.getPlayerOrException(), fare_evasion_handling);
     }
 }
