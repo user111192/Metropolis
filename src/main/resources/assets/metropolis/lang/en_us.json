@@ -112,6 +112,15 @@
     "item.metropolis.card": "IC Card",
     "item.metropolis.creative_card": "IC Card",
     "item.metropolis.exit_ticket": "Exit Ticket",
+    "item.metropolis.bridge_creator": "Bridge Creator",
+
+    "message.metropolis.ticket.get_entered": "Player %s's balance: %s / entry zone: %s",
+    "message.metropolis.ticket.get_not_entered": "Player %s's balance: %s / not entered",
+    "message.metropolis.ticket.no_player": "No Player is provided",
+    "message.metropolis.ticket.insufficient_balance": "Insufficient balance",
+    "message.metropolis.ticket.already_entered": "Already entered",
+    "message.metropolis.ticket.enter": "Player %s Entered / balance: %s / zone: %s",
+    "message.metropolis.ticket.exit": "Player %s Exited / Fare: %s / balance: %s / zone: %s",
 
     "block.metropolis.cable": "Cable",
 

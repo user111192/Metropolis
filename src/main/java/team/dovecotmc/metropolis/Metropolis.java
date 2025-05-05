@@ -1,8 +1,10 @@
 package team.dovecotmc.metropolis;
 
+import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.CreativeModeTab;
@@ -34,6 +36,7 @@ public class Metropolis implements ModInitializer {
             .icon(() -> new ItemStack(MetroItems.ITEM_ITV_MONITOR))
             .build();
     public static final MetroConfig config = MetroConfig.load();
+    public static final CommandDispatcher<CommandSourceStack> commandDispatcher = new CommandDispatcher<>();
 
     @Override
     public void onInitialize() {

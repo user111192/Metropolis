@@ -114,6 +114,15 @@
     "item.metropolis.card": "IC卡",
     "item.metropolis.creative_card": "IC卡",
     "item.metropolis.exit_ticket": "出站票",
+    "item.metropolis.bridge_creator": "桥梁创建器",
+
+    "message.metropolis.ticket.get_entered": "玩家%s的余额为%s, 已进站(Zone %s)",
+    "message.metropolis.ticket.get_not_entered": "玩家%s的余额为%s, 未进站",
+    "message.metropolis.ticket.no_player": "命令需要玩家，但没有提供玩家",
+    "message.metropolis.ticket.insufficient_balance": "余额不足",
+    "message.metropolis.ticket.already_entered": "已经进站",
+    "message.metropolis.ticket.enter": "玩家: %s 已进站 / 余额: %s / zone: %s",
+    "message.metropolis.ticket.exit": "玩家: %s 已出站 / 车费: %s / 余额: %s / zone: %s",
 
     "block.metropolis.cable": "线缆",
 
