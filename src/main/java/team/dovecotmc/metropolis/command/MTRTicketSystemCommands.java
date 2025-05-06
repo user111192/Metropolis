@@ -15,8 +15,7 @@ import team.dovecotmc.metropolis.abstractinterface.util.MALocalizationUtil;
 
 public class MTRTicketSystemCommands {
 
-    private static final SimpleCommandExceptionType ERROR_NO_PLAYER = new SimpleCommandExceptionType(MALocalizationUtil.translatableText("message.metropolis.ticket.no_player"));
-    public static LiteralCommandNode<CommandSourceStack> register (CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static LiteralCommandNode<CommandSourceStack> register(CommandDispatcher<CommandSourceStack> dispatcher) {
         return dispatcher.register(
                 Commands.literal("ticket")
                         // .requires(source -> source.hasPermission(2))
@@ -33,21 +32,28 @@ public class MTRTicketSystemCommands {
     static class EntryStatus {
         private int entry_zone;
         private boolean entered;
+
         EntryStatus(int entry_zone) {
             this.entry_zone = entry_zone;
             this.entered = true;
         }
+
         EntryStatus(int entry_zone, boolean entered) {
             this.entry_zone = entry_zone;
             this.entered = entered;
         }
+
         public int getEntryZone() {
             return entry_zone;
         }
-        public boolean isEntered() {return entered;}
+
+        public boolean isEntered() {
+            return entered;
+        }
     }
+
     private static EntryStatus decodeEntryZone(int entry_zone_original) {
-        if (entry_zone_original > 0) return new EntryStatus(entry_zone_original-1);
+        if (entry_zone_original > 0) return new EntryStatus(entry_zone_original - 1);
         else if (entry_zone_original < 0) return new EntryStatus(entry_zone_original);
         else {
             // entry_zone_original == 0
@@ -56,7 +62,7 @@ public class MTRTicketSystemCommands {
     }
 
     private static int encodeZone(int zone) {
-        if (zone >= 0) return zone+1;
+        if (zone >= 0) return zone + 1;
         else return zone;
     }
 
@@ -68,15 +74,15 @@ public class MTRTicketSystemCommands {
         int entry_zone_original = boards.getOrCreatePlayerScore(playername, boards.getObjective("mtr_entry_zone")).getScore();
         EntryStatus entry_zone = decodeEntryZone(entry_zone_original);
         if (entry_zone.isEntered()) {
-            source.sendSuccess(MALocalizationUtil.translatableText("message.metropolis.ticket.get_entered", playername, balance, entry_zone.getEntryZone()),true);
+            source.sendSuccess(MALocalizationUtil.translatableText("message.metropolis.ticket.get_entered", playername, balance, entry_zone.getEntryZone()), true);
         } else {
-            source.sendSuccess(MALocalizationUtil.translatableText("message.metropolis.ticket.get_not_entered", playername, balance),true);
+            source.sendSuccess(MALocalizationUtil.translatableText("message.metropolis.ticket.get_not_entered", playername, balance), true);
         }
         return 0;
     }
 
     private static int getSelfTicketInfo(CommandSourceStack source) throws CommandSyntaxException {
-        
+
         return getTicketInfo(source, source.getPlayerOrException());
     }
 
@@ -112,7 +118,7 @@ public class MTRTicketSystemCommands {
 
         int balance_now = boards.getOrCreatePlayerScore(playername, boards.getObjective("mtr_balance")).getScore();
 
-        source.sendSuccess(MALocalizationUtil.translatableText("message.metropolis.ticket.enter", playername, balance_now, zone),true);
+        source.sendSuccess(MALocalizationUtil.translatableText("message.metropolis.ticket.enter", playername, balance_now, zone), true);
         return 0;
     }
 
@@ -121,12 +127,12 @@ public class MTRTicketSystemCommands {
     }
 
     private static int enterStation(CommandSourceStack source, int zone) throws CommandSyntaxException {
-        
+
         return enterStation(source, zone, source.getPlayerOrException());
     }
 
     private static int enterStation(CommandSourceStack source, int zone, FareEvasionHandling fare_evasion_handling) throws CommandSyntaxException {
-        
+
         return enterStation(source, zone, source.getPlayerOrException(), fare_evasion_handling);
     }
 
@@ -141,12 +147,12 @@ public class MTRTicketSystemCommands {
     }
 
     private static int exitStation(CommandSourceStack source, int zone) throws CommandSyntaxException {
-        
+
         return exitStation(source, zone, source.getPlayerOrException(), DEFAULT_FARE_EVASION_HANDLING);
     }
 
     private static int exitStation(CommandSourceStack source, int zone, FareEvasionHandling fare_evasion_handling) throws CommandSyntaxException {
-        
+
         return exitStation(source, zone, source.getPlayerOrException(), fare_evasion_handling);
     }
 }
