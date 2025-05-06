@@ -66,13 +66,26 @@ public class MTRTicketSystemCommands {
         else return zone;
     }
 
-    private static int getTicketInfo(CommandSourceStack source, ServerPlayer serverplayer) {
-        // not tested
+    private static int getBalance(CommandSourceStack source, ServerPlayer serverplayer) {
+
         Scoreboard boards = source.getServer().getScoreboard();
         String playername = serverplayer.getScoreboardName();
-        int balance = boards.getOrCreatePlayerScore(playername, boards.getObjective("mtr_balance")).getScore();
+        return boards.getOrCreatePlayerScore(playername, boards.getObjective("mtr_balance")).getScore();
+    }
+
+    private static EntryStatus getTicket(CommandSourceStack source, ServerPlayer serverplayer) {
+        Scoreboard boards = source.getServer().getScoreboard();
+        String playername = serverplayer.getScoreboardName();
         int entry_zone_original = boards.getOrCreatePlayerScore(playername, boards.getObjective("mtr_entry_zone")).getScore();
-        EntryStatus entry_zone = decodeEntryZone(entry_zone_original);
+        return decodeEntryZone(entry_zone_original);
+    }
+
+    private static int getTicketInfo(CommandSourceStack source, ServerPlayer serverplayer) {
+        // not tested
+        String playername = serverplayer.getScoreboardName();
+        EntryStatus entry_zone = getTicket(source, serverplayer);
+        int balance = getBalance(source, serverplayer);
+
         if (entry_zone.isEntered()) {
             source.sendSuccess(MALocalizationUtil.translatableText("message.metropolis.ticket.get_entered", playername, balance, entry_zone.getEntryZone()), true);
         } else {
@@ -98,8 +111,7 @@ public class MTRTicketSystemCommands {
         Scoreboard boards = source.getServer().getScoreboard();
         String playername = serverplayer.getScoreboardName();
         int balance = boards.getOrCreatePlayerScore(playername, boards.getObjective("mtr_balance")).getScore();
-        int entry_zone_original = boards.getOrCreatePlayerScore(playername, boards.getObjective("mtr_entry_zone")).getScore();
-        EntryStatus entry_zone = decodeEntryZone(entry_zone_original);
+        EntryStatus entry_zone = decodeEntryZone(boards.getOrCreatePlayerScore(playername, boards.getObjective("mtr_entry_zone")).getScore());
 
         if (balance < 0) {
             source.sendFailure(MALocalizationUtil.translatableText("message.metropolis.ticket.insufficient_balance"));
