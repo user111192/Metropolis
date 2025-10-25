@@ -51,7 +51,7 @@ public class MetroItems {
     public static final Item ITEM_PSD_JR_DOOR_1 = register("psd_jr_door_1", new ItemBlockWithTooltips(MetroBlocks.BLOCK_PSD_JR_DOOR_1, new Item.Properties().tab(Metropolis.ITEM_GROUP)));
     public static final Item ITEM_PSD_JR_DOOR_2 = register("psd_jr_door_2", new ItemBlockWithTooltips(MetroBlocks.BLOCK_PSD_JR_DOOR_2, new Item.Properties().tab(Metropolis.ITEM_GROUP)));
     public static final Item ITEM_PSD_JR_FENCE_1 = register("psd_jr_fence_1", new ItemBlockWithTooltips(MetroBlocks.BLOCK_PSD_JR_FENCE_1, new Item.Properties().tab(Metropolis.ITEM_GROUP)));
-    public static final Item ITEM_PSD_JR_FENCE_2 = register("psd_jr_fence_2", new ItemBlockWithTooltips(MetroBlocks.BLOCK_PSD_JR_FENCE_2, new Item.Properties().tab(Metropolis.ITEM_GROUP)));
+    public static final Item ITEM_PSD_JR_FENCE_2 = register("psd_jr_fence_2", new ItemBlockWithTooltips(MetroBlocks.BLOCK_PSD_JR_FENCE_2, new Item.Properties()/*.tab(Metropolis.ITEM_GROUP)*/));
 
     // Ticket
     public static final Item ITEM_SINGLE_TRIP_TICKET = register("single_trip_ticket", new ItemTicket(new Item.Properties(), true));
@@ -91,6 +91,11 @@ public class MetroItems {
     public static final Item ITEM_CORDON_RED_WHITE = register("cordon_red_white", new ItemBlockWithTooltips(MetroBlocks.BLOCK_CORDON_RED_WHITE, new Item.Properties().tab(Metropolis.ITEM_GROUP)));
     // Bench
     public static final Item ITEM_BENCH = register("bench", new BlockItem(MetroBlocks.BLOCK_BENCH, new Item.Properties().tab(Metropolis.ITEM_GROUP)));
+    // Awning
+    public static final Item ITEM_AWNING_PILLAR = register("awning_pillar", new BlockItem(MetroBlocks.BLOCK_AWNING_PILLAR, new Item.Properties().tab(Metropolis.ITEM_GROUP)));
+    public static final Item ITEM_AWNING_PILLAR_EMERGENCY = register("awning_pillar_emergency", new BlockItem(MetroBlocks.BLOCK_AWNING_PILLAR_EMERGENCY, new Item.Properties().tab(Metropolis.ITEM_GROUP)));
+    public static final Item ITEM_AWNING_BEAM = register("awning_beam", new BlockItem(MetroBlocks.BLOCK_AWNING_BEAM, new Item.Properties().tab(Metropolis.ITEM_GROUP)));
+    public static final Item ITEM_AWNING_ROOF = register("awning_roof", new BlockItem(MetroBlocks.BLOCK_AWNING_ROOF, new Item.Properties().tab(Metropolis.ITEM_GROUP)));
 
     // TODO: Blind path
 //    public static final Item ITEM_BLIND_PATH_STRIP = register("blind_path_strip", new BlockItem(MetroBlocks.BLOCK_BLIND_PATH_STRIP, new Item.Settings().group(Metropolis.ITEM_GROUP)));
