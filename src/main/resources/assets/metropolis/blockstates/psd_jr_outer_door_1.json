@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "flipped=false": {"model": "metropolis:psd/platform_door_1_outer_door"},
+    "flipped=true": {"model": "metropolis:psd/platform_door_1_outer_door_flipped"}
+  }
+}

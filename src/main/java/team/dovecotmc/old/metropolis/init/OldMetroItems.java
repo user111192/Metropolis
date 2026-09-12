@@ -19,6 +19,10 @@ public class OldMetroItems {
     // PSD
     public static final Item ITEM_PSD_JR_DOOR_1 = register("psd_jr_door_1", new ItemBlockWithTooltips(OldMetroBlocks.BLOCK_PSD_JR_DOOR_1, new Item.Properties()));
     public static final Item ITEM_PSD_JR_DOOR_2 = register("psd_jr_door_2", new ItemBlockWithTooltips(OldMetroBlocks.BLOCK_PSD_JR_DOOR_2, new Item.Properties()));
+    public static final Item ITEM_PSD_JR_OUTER_DOOR_1 = register("psd_jr_outer_door_1", new ItemBlockWithTooltips(OldMetroBlocks.BLOCK_PSD_JR_OUTER_DOOR_1, new Item.Properties()));
+    public static final Item ITEM_PSD_JR_OUTER_DOOR_2 = register("psd_jr_outer_door_2", new ItemBlockWithTooltips(OldMetroBlocks.BLOCK_PSD_JR_OUTER_DOOR_2, new Item.Properties()));
+    public static final Item ITEM_PSD_JR_INNER_DOOR_1 = register("psd_jr_inner_door_1", new ItemBlockWithTooltips(OldMetroBlocks.BLOCK_PSD_JR_INNER_DOOR_1, new Item.Properties()));
+    public static final Item ITEM_PSD_JR_INNER_DOOR_2 = register("psd_jr_inner_door_2", new ItemBlockWithTooltips(OldMetroBlocks.BLOCK_PSD_JR_INNER_DOOR_2, new Item.Properties()));
     public static final Item ITEM_PSD_JR_FENCE_1 = register("psd_jr_fence_1", new ItemBlockWithTooltips(OldMetroBlocks.BLOCK_PSD_JR_FENCE_1, new Item.Properties()));
     public static final Item ITEM_PSD_JR_FENCE_2 = register("psd_jr_fence_2", new ItemBlockWithTooltips(OldMetroBlocks.BLOCK_PSD_JR_FENCE_2, new Item.Properties()/**/));
 

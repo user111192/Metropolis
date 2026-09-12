@@ -18,7 +18,10 @@ public class OldMetroBlockEntities {
     public static final BlockEntityType<BlockEntityPSDSmallDoorSemiAuto> PSD_SMALL_DOOR = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
             new ResourceLocation(Metropolis.MOD_ID, "psd_small_door"),
-            FabricBlockEntityTypeBuilder.create(BlockEntityPSDSmallDoorSemiAuto::new, OldMetroBlocks.BLOCK_PSD_JR_DOOR_1, OldMetroBlocks.BLOCK_PSD_JR_DOOR_2).build()
+            FabricBlockEntityTypeBuilder.create(BlockEntityPSDSmallDoorSemiAuto::new,
+                    OldMetroBlocks.BLOCK_PSD_JR_DOOR_1, OldMetroBlocks.BLOCK_PSD_JR_DOOR_2,
+                    OldMetroBlocks.BLOCK_PSD_JR_OUTER_DOOR_1, OldMetroBlocks.BLOCK_PSD_JR_OUTER_DOOR_2,
+                    OldMetroBlocks.BLOCK_PSD_JR_INNER_DOOR_1, OldMetroBlocks.BLOCK_PSD_JR_INNER_DOOR_2).build()
     );
 
     public static final BlockEntityType<BlockEntityTicketVendor> TICKET_VENDOR_BLOCK_ENTITY = Registry.register(

@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Quaternionf;
 import team.dovecotmc.old.metropolis.block.BlockPSDSmallDoorSemiAuto;
+import team.dovecotmc.old.metropolis.block.BlockPSDSmallDoorInnerSemiAuto;
 import team.dovecotmc.old.metropolis.block.entity.BlockEntityPSDSmallDoorSemiAuto;
 
 /**
@@ -46,7 +47,10 @@ public class BlockEntityRendererPSDSmallDoorSemiAuto implements BlockEntityRende
 
             int direction = state.getValue(BlockPSDSmallDoorSemiAuto.FLIPPED) ? -1 : 1;
 
-            matrices.translate(easeInOutSine(entity.open) * (14.5f / 16f) * direction, 0f, 0f);
+            final boolean isInnerDoor = state.getBlock() instanceof BlockPSDSmallDoorInnerSemiAuto;
+            final float maximumOpen = isInnerDoor ? BlockPSDSmallDoorInnerSemiAuto.MAX_OPEN : 1.0F;
+            final float maximumTravel = isInnerDoor ? 2.0F * (14.5f / 16f) : 14.5f / 16f;
+            matrices.translate(easeInOutSine(entity.open / maximumOpen) * maximumTravel * direction, 0f, 0f);
 
             BakedModel model = mc.getBlockRenderer().getBlockModel(state);
 
