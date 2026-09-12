@@ -1,8 +1,10 @@
 package team.dovecotmc.metropolis.config;
 
-import com.google.gson.*;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -11,7 +13,6 @@ import net.minecraft.world.item.Items;
 import team.dovecotmc.metropolis.Metropolis;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,18 +41,15 @@ public class MetroConfig {
             BuiltInRegistries.ITEM.getKey(Items.DIAMOND_SWORD).toString(),
             BuiltInRegistries.ITEM.getKey(Items.NETHERITE_SWORD).toString()
     );
-    public List<String> dangerItems;
-    public Item currencyItem;
-    public int maxFare;
+    public List<String> dangerItems = DEFAULT_DANGER_ITEMS;
+    public Item currencyItem = Items.EMERALD;
+    public int maxFare = 128;
 
     public MetroConfig() {
         this.json = new JsonObject();
-        this.dangerItems = DEFAULT_DANGER_ITEMS;
-        this.currencyItem = Items.EMERALD;
-        this.maxFare = 128;
     }
 
-    public void refresh() {
+    public void reset() {
         // Add default properties
         if (!json.has("danger_items")) {
             JsonArray array = new JsonArray();
@@ -93,14 +91,14 @@ public class MetroConfig {
         if (obj != null) {
             config.json = obj;
         }
-        config.refresh();
+        config.reset();
         MetroConfig.save(config);
         return config;
     }
 
     public static void save(MetroConfig config) {
         try {
-            config.refresh();
+            config.reset();
             new File(CONFIG_FILE_PATH.getParent().toUri()).mkdirs();
             Files.writeString(CONFIG_FILE_PATH, (new GsonBuilder()).setPrettyPrinting().create().toJson(config.json));
         } catch (Exception e) {
