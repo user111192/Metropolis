@@ -49,7 +49,7 @@ public class BlockEntityRendererPSDSmallDoorSemiAuto implements BlockEntityRende
 
             final boolean isInnerDoor = state.getBlock() instanceof BlockPSDSmallDoorInnerSemiAuto;
             final float maximumOpen = isInnerDoor ? BlockPSDSmallDoorInnerSemiAuto.MAX_OPEN : 1.0F;
-            final float maximumTravel = isInnerDoor ? 2.0F * (14.5f / 16f) : 14.5f / 16f;
+            final float maximumTravel = isInnerDoor ? 1.0F + 14.5f / 16f : 14.5f / 16f;
             matrices.translate(easeInOutSine(entity.open / maximumOpen) * maximumTravel * direction, 0f, 0f);
 
             BakedModel model = mc.getBlockRenderer().getBlockModel(state);

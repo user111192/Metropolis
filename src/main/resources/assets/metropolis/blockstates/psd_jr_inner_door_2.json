@@ -1,6 +1,6 @@
 {
   "variants": {
-    "flipped=false": {"model": "metropolis:psd/platform_door_1_doorglass"},
-    "flipped=true": {"model": "metropolis:psd/platform_door_1_doorglass_flipped"}
+    "flipped=false": {"model": "metropolis:psd/platform_door_1_inner_doorglass"},
+    "flipped=true": {"model": "metropolis:psd/platform_door_1_inner_doorglass_flipped"}
   }
 }
